@@ -5,7 +5,7 @@
 
 (def window-obj (obj/get js/aw "window"))
 (defn ->event-name [event]
-  (str "aw.windows." event))
+  (str "aw.window." event))
 
 (defrecord JSWindows []
   iWindows

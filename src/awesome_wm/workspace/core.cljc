@@ -82,17 +82,15 @@
         (->> (fn [windows]
                (cond
                  (< new-index 0)
-                 (do (println "poping")
-                     (-> (rest windows)
-                         (vec)
-                         (conj (first windows))
-                         (vec)))
+                 (-> (rest windows)
+                     (vec)
+                     (conj (first windows))
+                     (vec))
 
                  (>= new-index length)
-                 (do (println "butlasting")
-                     (->> (pop windows)
-                          (cons (last windows))
-                          (vec)))
+                 (->> (pop windows)
+                      (cons (last windows))
+                      (vec))
 
                  :else
                  (assoc windows

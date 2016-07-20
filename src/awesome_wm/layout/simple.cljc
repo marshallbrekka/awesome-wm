@@ -1,7 +1,7 @@
 (ns awesome-wm.layout.simple
   (:require [awesome-wm.util.math :as math]))
 
-(defn layout [frame window-count]
+(defn layout [workspace screen-frame workarea-frame padding useless-gap]
   (let [width (-> (:width frame)
                   (/ window-count)
                   (double)

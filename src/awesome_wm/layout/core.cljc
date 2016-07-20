@@ -1,8 +1,8 @@
 (ns awesome-wm.layout.core
   (:require [awesome-wm.api.windows.core :as win-api]
-            [awesome-wm.layout.simple :as simple]))
+            [awesome-wm.layout.max :as max]))
 
-(def strategies {:simple simple/layout})
+(def strategies {:simple (max/->Max)})
 
 (defn apply-layout [windows frames]
   (->> (map win-api/set-frame windows frames)

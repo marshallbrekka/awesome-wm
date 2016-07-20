@@ -1,3 +1,4 @@
+
 (ns awesome-wm.core
   (:require [awesome-wm.api.hotkey.core :as hk]
             [awesome-wm.api.applications.core :as apps]
@@ -8,6 +9,8 @@
             [awesome-wm.layout.core :as layout]
             [awesome-wm.workspace.core :as workspace]
             [awesome-wm.util.log :as log]
+            [awesome-wm.core2 :as core2]
+
             #?@(:cljs
                 [[weasel.repl :as repl]]
                 :clj
@@ -79,13 +82,25 @@
            (:frame)
            (win-api/set-frame window)))))
 
+(defn position-off-screen []
+  (if-let [win (win-api/focused)]
+    (win-api/set-frame win {:x 0 :y 8000 :width 100 :height 100})))
+
+(defn position-on-screen []
+  (if-let [win (win-api/focused)]
+    (win-api/set-frame win {:x 0 :y 0 :width 100 :height 100})))
+
 (hk/add "f" ["cmd" "opt"] full-screen)
 (hk/add "left" ["cmd" "opt"] half-screen-left)
 (hk/add "right" ["cmd" "opt"] half-screen-right)
 (hk/add "right" ["cmd" "opt" "ctrl"] next-monitor)
 (hk/add "left" ["cmd" "opt" "ctrl"] previous-monitor)
 
+
 ;;;;;;;;;; End Slate Config ;;;;;;;;;;;
+
+(core2/start)
+(log/log "foo bar ahhh")
 
 
 ;; REPL setup code
@@ -105,5 +120,3 @@
    (defn start-cljs-repl []
      (piggieback/cljs-repl
       (ws/repl-env :ip "0.0.0.0" :port 9001))))
-
-
