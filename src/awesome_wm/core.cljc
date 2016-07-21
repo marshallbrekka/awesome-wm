@@ -15,13 +15,14 @@
                  [cemerick.piggieback :as piggieback]])))
 
 ;;;;;;; Begin Slate Config ;;;;;;;;
-(defn half-frame-left [frame]
-  (update frame :width (fn [width] (/ width 2))))
-
-(defn half-frame-right [frame]
-  (-> frame
-      (update :x #(+ % (/ (:width frame) 2)))
-      (half-frame-left)))
+(defn frame-multiple
+  [monitor-divider position-index frame]
+  (let [width (-> (:width frame)
+                  (/ monitor-divider)
+                  (double))]
+    (-> frame
+        (assoc :width (int (Math/floor width)))
+        (assoc :x (int (Math/round (* width position-index)))))))
 
 (defn monitor-middleware [monitors]
   (->> monitors
@@ -38,28 +39,22 @@
   (-> (mon-api/get)
       (monitor-middleware)))
 
-(defn full-screen []
+(defn adjust-focused-window [frame-adjust-fn]
   (if-let [window (win-api/focused)]
     (->> (get-monitors)
          (win/current-monitor (win-api/get-frame window))
          (:frame)
+         (frame-adjust-fn)
          (win-api/set-frame window))))
+
+(defn full-screen []
+  (adjust-focused-window identity))
 
 (defn half-screen-left []
-  (if-let [window (win-api/focused)]
-    (->> (get-monitors)
-         (win/current-monitor (win-api/get-frame window))
-         (:frame)
-         (half-frame-left)
-         (win-api/set-frame window))))
+  (adjust-focused-window (partial frame-multiple 2 0)))
 
 (defn half-screen-right []
-  (if-let [window (win-api/focused)]
-    (->> (get-monitors)
-         (win/current-monitor (win-api/get-frame window))
-         (:frame)
-         (half-frame-right)
-         (win-api/set-frame window))))
+  (adjust-focused-window (partial frame-multiple 2 1)))
 
 (defn next-monitor []
   (if-let [window (win-api/focused)]
@@ -84,6 +79,15 @@
 (hk/add "right" ["cmd" "opt"] half-screen-right)
 (hk/add "right" ["cmd" "opt" "ctrl"] next-monitor)
 (hk/add "left" ["cmd" "opt" "ctrl"] previous-monitor)
+(hk/add "," ["cmd", "opt"]
+        (fn []
+          (adjust-focused-window (partial frame-multiple 3 0))))
+(hk/add "." ["cmd", "opt"]
+        (fn []
+          (adjust-focused-window (partial frame-multiple 3 1))))
+(hk/add "/" ["cmd", "opt"]
+        (fn []
+          (adjust-focused-window (partial frame-multiple 3 2))))
 
 ;;;;;;;;;; End Slate Config ;;;;;;;;;;;
 
