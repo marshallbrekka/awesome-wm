@@ -178,7 +178,7 @@
                          (update monitor :frame #(frame-multiple 2 1 %)))
                    (conj monitors monitor)))
                [])
-       ;; (sort-by (fn [mon] (-> mon :frame :x)) <)
+       (sort-by (fn [mon] (-> mon :frame :x)) <)
        ))
 
 (defn get-monitors []
@@ -221,20 +221,20 @@
            (:frame)
            (win-api/set-frame window)))))
 
-(defn focus-monitor [index x-offset y-offset]
-  (let [monitors (vec (get-monitors))]
-    (when (< index (count monitors))
-      
-      (let [point (-> (nth monitors index)
-                      (:frame)
-                      (dissoc :width :height)
-                      (update :x + x-offset)
-                      (update :y + y-offset))]
-        (cursor-api/set-position point)
-        (cursor-api/click point)))))
+;; (defn focus-monitor [index x-offset y-offset]
+;;   (let [monitors (vec (get-monitors))]
+;;     (when (< index (count monitors))
 
-(defonce x-cursor-offset 90)
-(defonce y-cursor-offset 33)
+;;       (let [point (-> (nth monitors index)
+;;                       (:frame)
+;;                       (dissoc :width :height)
+;;                       (update :x + x-offset)
+;;                       (update :y + y-offset))]
+;;         (cursor-api/set-position point)
+;;         (cursor-api/click point)))))
+
+;; (defonce x-cursor-offset 90)
+;; (defonce y-cursor-offset 33)
 
 (hk/add "f" ["cmd" "opt"] full-screen)
 (hk/add "left" ["cmd" "opt"] half-screen-left)
@@ -251,8 +251,8 @@
         (fn []
           (adjust-focused-window (partial frame-multiple 3 2))))
 
-(hk/add "," ["ctrl"] #(focus-monitor 0 x-cursor-offset y-cursor-offset))
-(hk/add "." ["ctrl"] #(focus-monitor 1 x-cursor-offset y-cursor-offset))
+;; (hk/add "," ["ctrl"] #(focus-monitor 0 x-cursor-offset y-cursor-offset))
+;; (hk/add "." ["ctrl"] #(focus-monitor 1 x-cursor-offset y-cursor-offset))
 
 ;;;;;;;;;; End Slate Config ;;;;;;;;;;;
 
