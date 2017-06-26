@@ -5,11 +5,12 @@
 
 (def window-obj (obj/get js/aw "window"))
 (defn ->event-name [event]
-  (str "aw.windows." event))
+  (str "aw.window." event))
+
 
 (defrecord JSWindows []
   iWindows
-  (get [_]
+  (windows [_]
     (-> (.windows window-obj)
         (js->clj :keywordize-keys true)))
   (close [_ pid id]
@@ -23,7 +24,8 @@
   (become-main [_ pid id]
     (.becomeMain window-obj pid id))
   (set-frame [_ pid id frame]
-    (.setFrame window-obj pid id (clj->js frame)))
+    (.setFrame window-obj pid id (clj->js frame))
+    )
   (get-frame [_ pid id]
     (-> (.getFrame window-obj pid id)
         (js->clj :keywordize-keys true)))

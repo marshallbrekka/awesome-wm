@@ -11,7 +11,7 @@
 
 (defrecord TestMonitors [listeners monitors]
   iMonitors
-  (get [_]
+  (monitors [_]
     @monitors)
   (add-listener [_ f]
     (swap! listeners conj f))

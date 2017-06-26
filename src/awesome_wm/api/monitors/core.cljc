@@ -4,8 +4,8 @@
 
 (def ^:dynamic *impl* (delay (impl/construct)))
 
-(defn get []
-  (p/get @*impl*))
+(defn monitors []
+  (p/monitors @*impl*))
 
 (defn add-listener [f]
   (p/add-listener @*impl* f))

@@ -5,7 +5,7 @@
 
 (defrecord TestWindows [listeners windows]
   iWindows
-  (get [_]
+  (windows [_]
     @windows)
   (close [_ pid id]
     nil)

@@ -1,9 +1,17 @@
+;; Manages monitor objects (and the list of monitors)
 (ns awesome-wm.model.monitors
   (:require [awesome-wm.util.geometry :as geo]
             [awesome-wm.model.internal.util :as util]))
 
 
-(defn rotate-monitor-helper [monitors monitor new-index-fn]
+(defn rotate-monitor-helper
+  "Given a list of monitors, the current 'focused' monitor, and a function that takes
+   two arguments (the current index of the focused monitor in the list of all monitors,
+   and the length of the list of monitors) and returns a new monitor index, it returns
+   the monitor at the index that the new-index-fn returns.
+
+   If the list of monitors only contains a single monitor, it always returns that monitor."
+  [monitors monitor new-index-fn]
   (let [length (count monitors)]
     (if (= 1 length)
       monitor

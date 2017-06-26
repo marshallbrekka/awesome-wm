@@ -4,8 +4,8 @@
 
 (def ^:dynamic *impl* (delay (impl/construct)))
 
-(defn get []
-  (p/get @*impl*))
+(defn windows []
+  (p/windows @*impl*))
 
 (defn close [window]
   (p/close @*impl* (:pid window) (:id window)))

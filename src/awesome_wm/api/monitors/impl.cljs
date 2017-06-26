@@ -5,7 +5,7 @@
 
 (defrecord JSMonitors []
   iMonitors
-  (get [_]
+  (monitors [_]
     (-> (.monitors (obj/get js/aw "monitors"))
         (js->clj :keywordize-keys true)))
   (add-listener [_ f]

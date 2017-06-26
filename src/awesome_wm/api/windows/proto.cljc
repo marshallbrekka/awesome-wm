@@ -1,7 +1,7 @@
 (ns awesome-wm.api.windows.proto)
 
 (defprotocol iWindows
-  (get [this])
+  (windows [this])
   (close [this pid id])
   (focused [this])
   (become-main [this pid id])

@@ -8,7 +8,7 @@
 
 (defrecord JSApplications []
   iApplications
-  (get [_]
+  (applications [_]
     (-> (.applications (obj/get js/aw "application"))
         (js->clj :keywordize-keys true)))
   (activate [_ pid]

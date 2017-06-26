@@ -1,5 +1,6 @@
 (ns awesome-wm.api.hotkey.impl
-  (:require [awesome-wm.api.hotkey.proto :refer [iHotkey]]))
+  (:require [awesome-wm.api.hotkey.proto :refer [iHotkey]])
+  (:refer-clojure :exclude [remove]))
 
 (defrecord TestHotkey []
   iHotkey

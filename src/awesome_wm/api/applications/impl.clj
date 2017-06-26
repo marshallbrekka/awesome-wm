@@ -6,7 +6,7 @@
 
 (defrecord TestApplications [listeners applications]
   iApplications
-  (get [_]
+  (applications [_]
     @applications)
   (activate [_ pid]
     nil)

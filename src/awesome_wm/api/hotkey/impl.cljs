@@ -1,6 +1,7 @@
 (ns awesome-wm.api.hotkey.impl
   (:require [awesome-wm.api.hotkey.proto :refer [iHotkey]]
-            [goog.object :as obj]))
+            [goog.object :as obj])
+  (:refer-clojure :exclude [remove]))
 
 (defrecord JSHotkey []
   iHotkey

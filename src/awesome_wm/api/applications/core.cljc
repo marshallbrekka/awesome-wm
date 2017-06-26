@@ -4,8 +4,8 @@
 
 (def ^:dynamic *impl* (delay (impl/construct)))
 
-(defn get []
-  (p/get @*impl*))
+(defn applications []
+  (p/applications @*impl*))
 
 (defn activate [app]
   (p/activate @*impl* (:pid app)))
