@@ -3,7 +3,7 @@
             [awesome-wm.api.hotkey.proto :as p])
   (:refer-clojure :exclude [remove]))
 
-#?(:cljs (.log js/console "hk.core"))
+;; #?(:cljs (.log js/console "hk.core"))
 (def ^:dynamic *impl* (delay (impl/construct)))
 
 (defn add [k modifiers f]

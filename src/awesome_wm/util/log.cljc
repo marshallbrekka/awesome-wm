@@ -2,7 +2,8 @@
 
 #?(:cljs
    (defn log [arg & args]
-     (.log js/console arg args))
+     (. js/Phoenix log arg))
+
    :clj
    (defn log [& args]
      (apply println args)))

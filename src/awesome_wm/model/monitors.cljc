@@ -1,6 +1,7 @@
 ;; Manages monitor objects (and the list of monitors)
 (ns awesome-wm.model.monitors
   (:require [awesome-wm.util.geometry :as geo]
+            [awesome-wm.util.log :as log]
             [awesome-wm.model.internal.util :as util]))
 
 
@@ -22,14 +23,14 @@
 
 (defn next-monitor [monitors monitor]
   (rotate-monitor-helper monitors monitor (fn [index length]
-                                            (println "next" index length )
+                                            (log/log "next" index length)
                                             (if (= index (dec length))
                                               0
                                               (inc index)))))
 
 (defn previous-monitor [monitors monitor]
   (rotate-monitor-helper monitors monitor (fn [index length]
-                                            (println "previous" index length )
+                                            (log/log "previous" index length )
                                             (if (= 0 index)
                                               (dec length)
                                               (dec index)))))

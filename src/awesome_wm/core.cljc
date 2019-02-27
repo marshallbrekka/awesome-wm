@@ -1,22 +1,24 @@
 (ns awesome-wm.core
-  (:require [awesome-wm.api.hotkey.core :as hk]
-            [awesome-wm.api.applications.core :as apps]
-            [awesome-wm.api.windows.core :as win-api]
-            ;; [awesome-wm.api.applications.core :as app-api]
-            [awesome-wm.api.monitors.core :as mon-api]
-            [awesome-wm.model.windows :as win]
-            [awesome-wm.model.monitors :as monitors]
-            ;; [awesome-wm.layout.core :as layout]
-            ;; [awesome-wm.workspace.core :as workspace]
-            [awesome-wm.util.log :as log]
-            #?@(:cljs
-                [
-                 ;; [clojure.browser.repl :as crepl]
-                 [weasel.repl :as repl]
-                 ]
-                :clj
-                [[weasel.repl.websocket :as ws]
-                 [cemerick.piggieback :as piggieback]])))
+  (:require 
+   [awesome-wm.api.hotkey.core :as hk]
+   ;; [awesome-wm.api.applications.core :as apps]
+   [awesome-wm.api.windows.core :as win-api]
+   ;; [awesome-wm.api.applications.core :as app-api]
+   [awesome-wm.api.cursor.core :as cursor-api]
+   [awesome-wm.api.monitors.core :as mon-api]
+   [awesome-wm.model.windows :as win]
+   [awesome-wm.model.monitors :as monitors]
+   ;; [awesome-wm.layout.core :as layout]
+   ;; [awesome-wm.workspace.core :as workspace]
+   [awesome-wm.util.log :as log]
+   #?@(:cljs
+       [
+        ;; [clojure.browser.repl :as crepl]
+        ;; [weasel.repl :as repl]
+        ]
+       :clj
+       [[weasel.repl.websocket :as ws]
+        [cemerick.piggieback :as piggieback]])))
 
 ;; {:monitor-count 2
 ;;  :counts {2 {:monitors [{:id 1
@@ -221,67 +223,71 @@
            (:frame)
            (win-api/set-frame window)))))
 
-;; (defn focus-monitor [index x-offset y-offset]
-;;   (let [monitors (vec (get-monitors))]
-;;     (when (< index (count monitors))
 
-;;       (let [point (-> (nth monitors index)
-;;                       (:frame)
-;;                       (dissoc :width :height)
-;;                       (update :x + x-offset)
-;;                       (update :y + y-offset))]
-;;         (cursor-api/set-position point)
-;;         (cursor-api/click point)))))
+(defn focus-monitor [index x-offset y-offset]
+  (let [monitors (vec (get-monitors))]
+    (when (< index (count monitors))
+      (let [point (-> (nth monitors index)
+                      (:frame)
+                      (dissoc :width :height)
+                      (update :x + x-offset)
+                      (update :y + y-offset))]
+        (cursor-api/set-position point)
+        (cursor-api/click point)))))
 
-;; (defonce x-cursor-offset 90)
-;; (defonce y-cursor-offset 33)
+(def x-cursor-offset 80)
+(def y-cursor-offset 10)
 
-(hk/add "f" ["cmd" "opt"] full-screen)
-(hk/add "left" ["cmd" "opt"] half-screen-left)
-(hk/add "right" ["cmd" "opt"] half-screen-right)
-(hk/add "right" ["cmd" "opt" "ctrl"] next-monitor)
-(hk/add "left" ["cmd" "opt" "ctrl"] previous-monitor)
-(hk/add "," ["cmd", "opt"]
+(log/log "about to register handlers")
+
+(hk/add "f" ["cmd" "alt"] full-screen)
+(hk/add "left" ["cmd" "alt"] half-screen-left)
+(hk/add "right" ["cmd" "alt"] half-screen-right)
+(hk/add "right" ["cmd" "alt" "ctrl"] next-monitor)
+(hk/add "left" ["cmd" "alt" "ctrl"] previous-monitor)
+(hk/add "," ["cmd", "alt"]
         (fn []
           (adjust-focused-window (partial frame-multiple 3 0))))
-(hk/add "." ["cmd", "opt"]
+(hk/add "." ["cmd", "alt"]
         (fn []
           (adjust-focused-window (partial frame-multiple 3 1))))
-(hk/add "/" ["cmd", "opt"]
+(hk/add "/" ["cmd", "alt"]
         (fn []
           (adjust-focused-window (partial frame-multiple 3 2))))
 
-;; (hk/add "," ["ctrl"] #(focus-monitor 0 x-cursor-offset y-cursor-offset))
-;; (hk/add "." ["ctrl"] #(focus-monitor 1 x-cursor-offset y-cursor-offset))
+(hk/add "m" ["ctrl"] #(focus-monitor 0 x-cursor-offset y-cursor-offset))
+(hk/add "," ["ctrl"] #(focus-monitor 1 x-cursor-offset y-cursor-offset))
+(hk/add "." ["ctrl"] #(focus-monitor 2 x-cursor-offset y-cursor-offset))
+(hk/add "/" ["ctrl"] #(focus-monitor 3 x-cursor-offset y-cursor-offset))
 
 ;;;;;;;;;; End Slate Config ;;;;;;;;;;;
 
 
-;; #?(:cljs
-;;    (do
-;;      (defonce conn
-;;        (crepl/connect "http://localhost:9000/repl")) 
+;; ;; #?(:cljs
+;; ;;    (do
+;; ;;      (defonce conn
+;; ;;        (crepl/connect "http://localhost:9000/repl")) 
 
-;;      (enable-console-print!)
+;; ;;      (enable-console-print!)
 
-;;      (println "Hello world!")))
+;; ;;      (println "Hello world!")))
 
-;; REPL setup code
-#?(:cljs 
-   (do
-     (enable-console-print!)
-     (.log js/console "hello test")
+;; ;; REPL setup code
+;; ;; #?(:cljs 
+;; ;;    (do
+;; ;;      (enable-console-print!)
+;; ;;      (.log js/console "hello test")
 
-     (when-not (repl/alive?)
-       (repl/connect "ws://localhost:9001"))
+;; ;;      (when-not (repl/alive?)
+;; ;;        (repl/connect "ws://localhost:9001"))
 
-     (if (repl/alive?)
-       (println "Loaded example"))
+;; ;;      (if (repl/alive?)
+;; ;;        (println "Loaded example"))
 
-     (repl/alive?))
-   :clj
-   (defn start-cljs-repl []
-     (piggieback/cljs-repl
-      (ws/repl-env :ip "0.0.0.0" :port 9001))))
+;; ;;      (repl/alive?))
+;; ;;    :clj
+;; ;;    (defn start-cljs-repl []
+;; ;;      (piggieback/cljs-repl
+;; ;;       (ws/repl-env :ip "0.0.0.0" :port 9001))))
 
 

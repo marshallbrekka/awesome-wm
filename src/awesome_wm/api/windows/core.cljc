@@ -17,10 +17,10 @@
   (p/become-main @*impl* (:pid window) (:id window)))
 
 (defn set-frame [window frame]
-  (p/set-frame @*impl* (:pid window) (:id window) frame))
+  (p/set-frame @*impl* window frame))
 
 (defn get-frame [window]
-  (p/get-frame @*impl* (:pid window) (:id window)))
+  (p/get-frame @*impl* window))
 
 (defn set-minimized [window minimized?]
   (p/set-minimized @*impl* (:pid window) (:id window) minimized?))
